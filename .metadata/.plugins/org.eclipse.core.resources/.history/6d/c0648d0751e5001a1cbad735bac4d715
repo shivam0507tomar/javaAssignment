@@ -1,0 +1,76 @@
+package com.example.demo1;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+@SpringBootApplication
+public class Demo1Application {
+	@Autowired
+	private RestTemplate restTemplate;
+	public static void main(String[] args) {
+		SpringApplication.run(Demo1Application.class, args);
+		
+	
+		}
+
+
+public void testGetAllUsers() {
+HttpHeaders headers = new HttpHeaders();
+
+HttpEntity<String> entity = new HttpEntity<String>(null, headers);
+
+ResponseEntity<String> response = restTemplate.exchange("http://localhost:9090" + "/users",
+HttpMethod.GET, entity, String.class);
+//Assert.assertNotNull(response.getBody());
+System.out.println(response.getBody());
+}
+
+public void testGetUserById() {
+User user = restTemplate.getForObject("http://localhost:9090" + "/users/1", User.class);
+System.out.println("User Name: "+user.getFirstName());
+System.out.println(user);
+//Assert.assertNotNull(user);
+}
+
+public void testCreateUser() {
+User user = new User();
+user.setEmail("admin@gmail.com");
+user.setFirstName("admin");
+user.setLastName("admin");
+user.setCreatedBy("admin");
+user.setUpdatedBy("admin");
+ResponseEntity<User> postResponse = restTemplate.postForEntity("http://localhost:9090" + "/users", user, User.class);
+System.out.println(postResponse.getBody());
+System.out.println(postResponse);
+
+}
+@Test
+public void testUpdatePost() {
+int id = 1;
+User user = restTemplate.getForObject("http://localhost:9090" + "/users/" + id, User.class);
+user.setFirstName("admin1");
+user.setLastName("admin2");
+restTemplate.put(getRootUrl() + "/users/" + id, user);
+User updatedUser = restTemplate.getForObject("http://localhost:9090" + "/users/" + id, User.class);
+Assert.assertNotNull(updatedUser);
+}
+@Test
+public void testDeletePost() {
+int id = 2;
+User user = restTemplate.getForObject("http://localhost:9090" + "/users/" + id, User.class);
+Assert.assertNotNull(user);
+restTemplate.delete("http://localhost:9090" + "/users/" + id);
+try {
+user = restTemplate.getForObject("http://localhost:9090" + "/users/" + id, User.class);
+} catch (final HttpClientErrorException e) {
+Assert.assertEquals(e.getStatusCode(), HttpStatus.NOT_FOUND);
+}
+}
+
+}

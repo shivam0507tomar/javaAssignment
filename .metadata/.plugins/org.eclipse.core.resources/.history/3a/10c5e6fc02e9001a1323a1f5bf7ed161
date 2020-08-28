@@ -1,0 +1,30 @@
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Test {
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	private static List<File> listFilesOldestFirst(final String directoryPath) throws IOException {
+	    final List<File> files = Arrays.asList(new File(directoryPath).listFiles());
+	    final Map<File, Long> constantLastModifiedTimes = new HashMap<File,Long>();
+	    for (final File f : files) {
+	        constantLastModifiedTimes.put(f, f.lastModified());
+	    }
+	    Collections.sort(files, new Comparator<File>() {
+	        @Override
+	        public int compare(final File f1, final File f2) {
+	            return constantLastModifiedTimes.get(f1).compareTo(constantLastModifiedTimes.get(f2));
+	        }
+	    });
+	    return files;
+	}
+}

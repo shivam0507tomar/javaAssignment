@@ -1,0 +1,95 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+public class Test {
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		try {
+			List<File> listFilesOldestFirst = listFilesOldestFirst("E:\\Desktop\\MarkSheet");
+			
+			for(final File f:listFilesOldestFirst)
+			{Path filePath = f.toPath();
+			 BasicFileAttributes attributes = null;
+			attributes =
+                    Files.readAttributes(filePath, BasicFileAttributes.class);
+			 Date creationDate =
+	                    new Date(attributes.creationTime().to(TimeUnit.MILLISECONDS));
+				System.out.println(creationDate.getMonth());
+				//Date d=new Date(creationTime);
+				//System.out.println(d.getMonth());
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private static List<File> listFilesOldestFirst(final String directoryPath) throws IOException {
+	    final List<File> files = Arrays.asList(new File(directoryPath).listFiles());
+	    final Map<File, Long> constantLastModifiedTimes = new HashMap<File,Long>();
+	    for (final File f : files) {
+	    	HashMap<Integer,Integer> map=new HashMap<>();
+	    	Path filePath0 = f.toPath();
+			BasicFileAttributes attributes0 = null;
+			attributes0 =
+			        Files.readAttributes(filePath0, BasicFileAttributes.class);
+			Date creationDate0 =
+                    new Date(attributes0.creationTime().to(TimeUnit.MILLISECONDS));
+			
+			if(map.containsKey(creationDate0.getMonth()))
+			{
+				int v=map.get(creationDate0.getMonth());
+				v++;
+				map.put(creationDate0.getMonth(),v);
+			}
+	    }
+	    
+	    
+	    
+	    
+	    return map;
+	}
+}
+/*
+class MyComparator implements Comparator<File>
+{
+
+	@Override
+	public int compare(File arg0, File arg1) {
+		Path filePath0 = arg0.toPath();
+		BasicFileAttributes attributes0 = null;
+		Path filePath1 = arg1.toPath();
+		BasicFileAttributes attributes1 = null;
+		try {
+			attributes0 =
+			        Files.readAttributes(filePath0, BasicFileAttributes.class);
+			attributes1 =
+			        Files.readAttributes(filePath1, BasicFileAttributes.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		 Date creationDate0 =
+                    new Date(attributes0.creationTime().to(TimeUnit.MILLISECONDS));
+			//System.out.println(creationDate0.getMonth());
+			Date creationDate1 =
+                    new Date(attributes1.creationTime().to(TimeUnit.MILLISECONDS));
+			//System.out.println(creationDate1.getMonth());
+			
+		return (new Integer(creationDate0.getMonth())).compareTo(new Integer((creationDate1.getMonth())));
+	}
+	
+}
+*/
