@@ -1,0 +1,6 @@
+1598600869832	Extract local variable 'listFilesOldestFirst'
+1598601954404	Extract local variable 'attribute'
+1598616550582	Rename type 'Test'
+1598618720460	Delete element
+1598618815852	Rename type 'PatternPrintWithoutAnyError'
+1598618841971	Rename type 'NumberOfFilesCountGroupByMonth'
