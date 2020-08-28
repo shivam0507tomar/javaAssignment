@@ -1,0 +1,11 @@
+
+public class PatternPrintWithoutAnyErrorAssignment1 {
+
+	public static void main(String[] args) {
+		
+// TODO Auto-generated method stub
+a.b.c= c.b.a;
+System.out.println("Compiled & run successfully..");
+	}
+
+}
